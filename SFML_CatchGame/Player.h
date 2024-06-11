@@ -1,25 +1,35 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Animation.h";
+
+
+
 class Player
 {
 public:
-    Player(sf::RenderWindow& window, const std::string& textureFile, float speed);
+    Player(sf::RenderWindow& Window, const std::string& texturesFolderPath, float speed);
 
     void handleInput();
-    void draw();
+    void render();
+    void update(float deltaTime);
+    sf::Sprite& getSprite();
+    sf::RectangleShape getBoundingBox() const;
 
 private:
-    sf::RenderWindow& window;
-    sf::Sprite sprite;
-    sf::Texture texture;
+    sf::RenderWindow& Window;
+    sf::IntRect Rect;
+    sf::Sprite Sprite;
+    std::vector<sf::Texture> Textures;
+    Animation IdleAnimation;
+    Animation WalkAnimation;
+    Animation DeathAnimation;
+    bool movingLeft;
+    bool movingRight;
     float speed;
 
- 
-    void moveLeft();
-    void moveRight();
-    void animate();
-    bool leftCollision(float position, float leftBound);
-    bool rightCollision(float position, float rightBound);
+private:
+    void movePlayer(float deltaTime, sf::Vector2f movement);
+    bool inCollision(const sf::Vector2f& newPosition);
 };
 
